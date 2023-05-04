@@ -1,0 +1,22 @@
+--- ./liberfa/erfa/src/starpv.c.orig	2023-04-26 13:11:53
++++ ./liberfa/erfa/src/starpv.c	2023-05-04 13:34:19
+@@ -199,14 +199,13 @@
+    }
+    if (i >= IMAX) iwarn += 4;
+ 
+-/* Replace observed radial velocity with inertial value. */
+-   w = (betsr != 0.0) ? d + del / betsr : 1.0;
+-   eraSxp(w, usr, ur);
+-
+-/* Replace observed tangential velocity with inertial value. */
++   /* Scale observed tangential velocity vector into inertial (au/d). */
+    eraSxp(d, ust, ut);
+ 
+-/* Combine the two to obtain the inertial space velocity. */
++   /* Compute inertial radial velocity vector (au/d). */
++   eraSxp(ERFA_DC*(d*betsr+del), x, ur);
++
++   /* Combine the two to obtain the inertial space velocity vector. */
+    eraPpp(ur, ut, pv[1]);
+ 
+ /* Return the status. */

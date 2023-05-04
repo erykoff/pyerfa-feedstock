@@ -1,0 +1,23 @@
+--- ./liberfa/erfa/src/pvstar.c.orig	2023-04-29 17:01:55
++++ ./liberfa/erfa/src/pvstar.c	2023-05-04 13:34:13
+@@ -123,15 +123,13 @@
+    if (d == 0.0 || w > 1.0) return -1;
+    del = - w / (sqrt(1.0-w) + 1.0);
+ 
+-/* Apply relativistic correction factor to radial velocity component. */
+-   w = (betr != 0) ? (betr - del) / (betr * d) : 1.0;
+-   eraSxp(w, ur, usr);
+-
+-/* Apply relativistic correction factor to tangential velocity */
+-/* component.                                                  */
++   /* Scale inertial tangential velocity vector into observed */
+    eraSxp(1.0/d, ut, ust);
+ 
+-/* Combine the two to obtain the observed velocity vector (au/day). */
++   /* Compute observed radial velocity vector. */
++   eraSxp(ERFA_DC*(betr-del)/d, x, usr);
++
++   /* Combine the two to obtain the observed velocity vector. */
+    eraPpp(usr, ust, pv[1]);
+ 
+ /* Cartesian to spherical. */
